@@ -1,0 +1,46 @@
+<html>
+    <head>
+        <title>Intro to Javascript assignment</title>
+    </head>
+    <body>
+        <script>
+            window.alert("Welcome to William's Gaming store!")
+            now= new Date();
+            arrival = (now.getMonth() + 1) + "/" + (now.getDate() + 7) + "/" + now.getFullYear();
+            hour = now.getHours();
+            var name;
+            var item;
+            var number;
+            name = window.prompt("What is your name?");
+            item = window.prompt("What would you like to purchase today? Games, Consoles, Controllers, or something else?");
+            number = window.prompt("How many " + item + "(s) would you like to purchase?");
+           if (hour < 12)
+           {
+             document.write("Good Morning ")
+           }
+           else if(hour < 18)
+           {
+             document.write("Good Afternoon ")
+           }
+           else
+           {
+             document.write("Good Evening ")
+           }
+           document.writeln(name + ", thank you for ordering from William's Gaming store!");
+           if (number < 1 || number > 99)
+           {
+            document.writeln("Apologies, but we are unable to process that number of your order. Please select a number between 1 and 99.");
+           }
+           else if(item.split(" ").length > 1)
+           {
+            document.writeln("Apologies, but we are unable to process more than one item at a time.");
+           }
+           else
+           {
+           document.writeln("You have placed an order for " + item + ".");
+           document.writeln("You have ordered " + number + " " + item + ".");
+           document.writeln("Your order is expected to arrive at " + arrival + ".");
+           }
+        </script>
+    </body>
+</html>
