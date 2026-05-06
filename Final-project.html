@@ -1,0 +1,244 @@
+<html>
+    <head>
+         <!--title-->
+        <title>Final Project</title>
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" 
+integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" 
+integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    </head>
+    <body>
+            <!--Navbar creation--> 
+            <div class="navbar navbar-expand-lg navbar-light bg-light">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <!--Links for the nav bar buttons-->
+                    <a class="nav-link" href="Final-project.html">Upcoming seasons<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="FinalProjectPage2.html">Top Rated ONAs</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+        <!--Page title and description-->
+        <div class="jumbotron">
+         <h1 class="display-4 text-center">Upcoming Anime seasons</h1>
+         <p class="lead text-center">This page will show the results from My anime list's Top Upcoming Anime seasons, refing to shows that have been renued for a new season</p>
+         <p class= "lead text-center">To use the search function, enter the full name of an anime.</p>
+            <!--Button to reset data after a search-->
+        <center>
+            <button class = "btn btn-primary" type = "button" onclick="resetData()">Reload Data</button>
+        </center>
+        <!--searchbar and search button-->
+        <div class = "mt-3 text-center">
+            <div style = "display: flex; justify-content: center;">
+                <input class = "form-control search-bar" type = "text" id = "animeSearchBar"
+                placeholder="Enter an Anime">
+                <button class = "btn btn-secondary" type = "button" onclick = "search(document.getElementById('animeSearchBar').value)">Search</button>
+            </div>
+        </div>
+
+         <div class="ContentBody"
+         style="display: grid; 
+         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+         gap: 100px;
+         padding: 20px 10px;
+         margin:auto"
+         id = "content">
+
+            
+         </div>
+
+
+
+
+
+    </div>
+     <script>
+        let allAnime = {};
+        const container = document.querySelector(".ContentBody");
+
+        async function FetchSeasons()
+        {
+            const url = "https://api.jikan.moe/v4/seasons/upcoming";
+            const options =
+            {
+                method: 'GET',
+            };
+            //fetch command that gathers the data from the API
+            const response = await fetch(url, options);
+            const result = await response.text();
+            const myObj = JSON.parse(result);
+            // console.log(myObj)
+            // console.log(myObj.data.length);
+            
+            allAnime = myObj;
+            //Follows the DOM of the JSON to grab the image from the first listed data
+            const imageUrl = myObj.data[0].images.jpg.image_url;
+
+            loadFunctions(container, myObj);
+            //container.innerHTML = `<img src="${imageUrl}" alt = "Anime Image">`;
+
+
+            console.log("HERE IS YOUR DATA!");
+            console.log(myObj.data[0]);
+            //fetch("https://api.jikan.moe/v4/seasons/upcoming")
+            //.then(res => console.log(res))
+        }
+        FetchSeasons()
+
+
+        function loadFunctions(container, object){
+
+            var content = "";
+            console.log(object.data.length);
+            //for loop used to create variables to contain the api data
+            for(var i=0; i < object.data.length; i++)
+            {
+                //variables for API data
+                let AnimeImage;
+                let AnimeTitle;
+                let AnimeScource;
+                let AnimeTVRating;
+                let AnimeGenere = [];
+                let AnimeThemes = [];
+
+            //loads the data of the api into the variable, as the loop continues, it moves on to the next set of data
+               AnimeImage = object.data[i].images.jpg.image_url;
+               AnimeTitle = object.data[i].title;
+               AnimeScource = object.data[i].source;
+               AnimeTVRating = object.data[i].rating;
+               console.log(object.data[i].genres.length);
+
+                //genere and themes require a second for loop, because there are multiple of them that need to be listed
+               for(var j=0; j < object.data[i].genres.length; j++)
+               {
+                    AnimeGenere.push(object.data[i].genres[j].name);
+               }
+
+               if(  object.data[i].themes.length == 0)
+                    AnimeThemes.push("N/A");
+               else
+               {
+                for(var k=0; k < object.data[i].themes.length; k++)
+                {
+                    AnimeThemes.push(object.data[i].themes[k].name);
+                }
+               }
+
+               //displays the gathered data onto the web page//
+               console.log(AnimeImage);
+               console.log(AnimeTitle);
+               console.log(AnimeScource);
+               console.log(AnimeTVRating);
+               console.log(AnimeGenere);
+               console.log(AnimeThemes);
+
+            //Displays the data in a Card style, so all the information is gathered neatly.
+            var card = `<div class="card" style="width: 18rem;">
+            <img src="${AnimeImage}" class="card-img-top" alt="...">
+            <div class="card-body">
+            <h5 class="card-title">Tile: ${AnimeTitle}</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+            <li class="list-group-item">Source: ${AnimeScource}</li>
+            <li class="list-group-item">Rating: ${AnimeTVRating}</li>
+            <li class="list-group-item">Genere: ${AnimeGenere}</li>
+            <li class="list-group-item">Themes: ${AnimeThemes}<li>
+            </ul>
+            </div>`;
+
+            content += card;
+
+            }
+            container.innerHTML = content;
+        }
+        //Function for the search bar that takes in an input from the user
+        function search(input)
+        {
+            let found = false;
+            //For loop used to search the already collected data from the API,
+            for(var i=0; i < allAnime.data.length; i++)
+            {
+                let AnimeTitle = allAnime.data[i].title;
+                //If the title input by the user matches the data, then the data found gets displayed
+                if( input == AnimeTitle)
+                {   
+                    container.innerHTML = "";
+
+                    found = true;
+
+                    let AnimeImage;
+                    let AnimeTVRating;
+                    let AnimeGenere = [];
+                    let AnimeThemes = [];
+
+                    AnimeImage = allAnime.data[i].images.jpg.image_url;
+                    AnimeTitle = allAnime.data[i].title;
+                    AnimeScource = allAnime.data[i].source;
+                    AnimeTVRating = allAnime.data[i].rating;
+                    
+                    for(var j=0; j < allAnime.data[i].genres.length; j++)
+                    {
+                            AnimeGenere.push(allAnime.data[i].genres[j].name);
+                    }
+
+                    if(  allAnime.data[i].themes.length == 0)
+                            AnimeThemes.push("N/A");
+                    else
+                    {
+                        for(var k=0; k < allAnime.data[i].themes.length; k++)
+                        {
+                            AnimeThemes.push(allAnime.data[i].themes[k].name);
+                        }
+                    }
+
+                    var card = `<div class="card mx-auto" style="width: 18rem;">
+                    <img src="${AnimeImage}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                    <h5 class="card-title">Tile: ${AnimeTitle}</h5>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Source: ${AnimeScource}</li>
+                    <li class="list-group-item">Rating: ${AnimeTVRating}</li>
+                    <li class="list-group-item">Genere: ${AnimeGenere}</li>
+                    <li class="list-group-item">Themes: ${AnimeThemes}<li>
+                    </ul>
+                    </div>`;
+
+                    //content += card;
+
+                    }
+                    container.innerHTML = card;
+            }
+            //if the inputed title does not match any of the data, the window pops up warninng the user as such, and no information is displayed.
+            if( found == false)
+                window.alert("No Anime with that name");
+        }
+        // created the function used in the reset button 
+        function resetData()
+        {
+            loadFunctions(container, allAnime);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+     </script>
+    </body>
+</html>
