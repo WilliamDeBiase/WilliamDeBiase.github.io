@@ -63,7 +63,7 @@ integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cD
      <script>
         //Stores the information of the API 
         let allAnime = {};
-        //Sends the information stored in the container to the content body.
+        //Useses the content body to organize the information.
         const container = document.querySelector(".ContentBody");
 
         /**
@@ -81,12 +81,13 @@ integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cD
             };
             //fetch command that gathers the data from the API in the URL, using the GET command.
             const response = await fetch(url, options);
-
+            //Result collects the JSON data from the API
             const result = await response.text();
+            //parse the json data into javascript object format.
             const myObj = JSON.parse(result);
             // console.log(myObj)
             // console.log(myObj.data.length);
-            //sends the data stored in myObj to the allanime, allowing for the use of the data without having to fetch the API again
+            //sends the data from in myObj to be stored in the allAnime object, allowing for the use of the data without having to fetch the API again
             allAnime = myObj;
             //Follows the DOM of the JSON to grab the image from the first listed data within the imag
             const imageUrl = myObj.data[0].images.jpg.image_url;
@@ -105,9 +106,8 @@ integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cD
 
         //Function to load in and display the data.
         function loadFunctions(container, object){
-
+            //content is a blank string to allow each card to be appended in to this string
             var content = "";
-            //
             console.log(object.data.length);
             //for loop used to create variables to contain the api data
             for(var i=0; i < object.data.length; i++)
