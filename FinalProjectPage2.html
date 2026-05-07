@@ -91,7 +91,7 @@ integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cD
             allAnime = myObj;
             //Follows the DOM of the JSON to grab the image from the first listed data within the imag
             const imageUrl = myObj.data[0].images.jpg.image_url;
-            //
+            //Call load function with container and myObj as the parameters.
             loadFunctions(container, myObj);
             //container.innerHTML = `<img src="${imageUrl}" alt = "Anime Image">`;
 
@@ -120,7 +120,7 @@ integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cD
                 let AnimeGenere = [];
                 let AnimeThemes = [];
 
-                //loads the data of the api into the variable, as the loop continues, it moves on to the next set of data
+            //loads the data of the api into the variable, as the loop continues, it moves on to the next set of data
                AnimeImage = object.data[i].images.jpg.image_url;
                AnimeTitle = object.data[i].title;
                AnimeScource = object.data[i].source;
