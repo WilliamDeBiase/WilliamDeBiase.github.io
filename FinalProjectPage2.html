@@ -29,7 +29,7 @@ integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cD
         <!--Page title and description-->
         <div class="jumbotron">
          <h1 class="display-4 text-center">Top Rated Anime</h1>
-         <p class="lead text-center">This page will show the results from My anime list's Top Rated Shows, as deemed from users of the website.</p>
+         <p class="lead text-center">This page will show the results from My anime list's Top Rated shows, as deemed from users of the website</p>
          <p class= "lead text-center">To use the search function, enter the full name of an anime.</p>
             <!--Button to reset data after a search-->
         <center>    
@@ -42,7 +42,8 @@ integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cD
                 <button class = "btn btn-secondary" type = "button" onclick = "search(document.getElementById('animeSearchBar').value)">Search</button>
             </div>
         </div>
-
+        <!--This is where the anime card go into to organizes them-->
+        <!--Gap, padding and margin manipulate the styleing and spacing between the cards-->
          <div class="ContentBody"
          style="display: grid; 
          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -60,10 +61,16 @@ integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cD
 
     </div>
      <script>
-
+        //Stores the information of the API 
         let allAnime = {};
+        //Sends the information stored in the container to the content body.
         const container = document.querySelector(".ContentBody");
 
+        /**
+         * Function fetches the data from the URL and places the data in the allanime object
+         * calls the load function to display
+         * 
+        */
         async function FetchSeasons()
         {
             //API url
@@ -72,17 +79,18 @@ integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cD
             {
                 method: 'GET',
             };
-            //fetch command that gathers the data from the API
+            //fetch command that gathers the data from the API in the URL, using the GET command.
             const response = await fetch(url, options);
+
             const result = await response.text();
             const myObj = JSON.parse(result);
             // console.log(myObj)
             // console.log(myObj.data.length);
-            
+            //sends the data stored in myObj to the allanime, allowing for the use of the data without having to fetch the API again
             allAnime = myObj;
-            //Follows the DOM of the JSON to grab the image from the first listed data
+            //Follows the DOM of the JSON to grab the image from the first listed data within the imag
             const imageUrl = myObj.data[0].images.jpg.image_url;
-
+            //
             loadFunctions(container, myObj);
             //container.innerHTML = `<img src="${imageUrl}" alt = "Anime Image">`;
 
@@ -92,12 +100,14 @@ integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cD
             //fetch("https://api.jikan.moe/v4/seasons/upcoming")
             //.then(res => console.log(res))
         }
+        //calls the fetch seasons function 
         FetchSeasons()
 
-
+        //Function to load in and display the data.
         function loadFunctions(container, object){
 
             var content = "";
+            //
             console.log(object.data.length);
             //for loop used to create variables to contain the api data
             for(var i=0; i < object.data.length; i++)
@@ -122,7 +132,7 @@ integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cD
                {
                     AnimeGenere.push(object.data[i].genres[j].name);
                }
-
+               //if the themes is empty, N/A is displayed instead
                if(  object.data[i].themes.length == 0)
                     AnimeThemes.push("N/A");
                else
@@ -132,7 +142,7 @@ integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cD
                     AnimeThemes.push(object.data[i].themes[k].name);
                 }
                }
-               //displays the gathered data onto the web page//
+
                console.log(AnimeImage);
                console.log(AnimeTitle);
                console.log(AnimeScource);
@@ -153,13 +163,16 @@ integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cD
             <li class="list-group-item">Themes: ${AnimeThemes}<li>
             </ul>
             </div>`;
-
+            
+            //sends the data put into card to be displayed in content
             content += card;
 
             }
+            //displays the cards on the web page.
             container.innerHTML = content;
         }
         //Function for the search bar that takes in an input from the user
+        //Searches the Anime by its name
         function search(input)
         {
             let found = false;
@@ -198,7 +211,7 @@ integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cD
                             AnimeThemes.push(allAnime.data[i].themes[k].name);
                         }
                     }
-
+                    //displays information gotten within a card format.
                     var card = `<div class="card mx-auto" style="width: 18rem;">
                     <img src="${AnimeImage}" class="card-img-top" alt="...">
                     <div class="card-body">
@@ -221,7 +234,7 @@ integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cD
             if( found == false)
                 window.alert("No Anime with that name");
         }
-        // created the function used in the reset button 
+        // resets the displayed data using
         function resetData()
         {
             loadFunctions(container, allAnime);
